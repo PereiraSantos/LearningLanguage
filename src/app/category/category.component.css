@@ -1,0 +1,201 @@
+.card {
+    width: 100%;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+    overflow: hidden;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 10px;
+    background-color: white;
+
+}
+
+.card-title {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.btn-new {
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-new:hover {
+    background-color: #1565c0;
+}
+
+.card-content {
+    padding: 24px;
+    color: #666;
+
+}
+
+.category-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+}
+
+.category-word {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+    padding-top: 10px;
+}
+
+.category-badge {
+    width: 22%;
+    padding: 6px 12px 10px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid rgb(218, 218, 218);
+    background-color: #fafafb;
+}
+
+.category-badge-word {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 07px 5px;
+    border-radius: 16px;
+    font-size: 14px;
+    border: 1px solid rgb(219, 218, 218);
+    background-color: white;
+    height: 05px;
+
+}
+
+.card-header-word {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 05px;
+    background-color: #fafafb;
+}
+
+.category-name {
+    margin-right: 8px;
+    color: rgba(0, 0, 0, 0.842);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.category-name-word {
+    margin-right: 8px;
+    color: rgba(0, 0, 0, 0.842);
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.btn-delete {
+    background: none;
+    border: none;
+    color: rgb(196, 195, 195);
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.btn-delete:hover {
+    color: #d32f2f;
+}
+
+/* MODAL */
+.input-group {
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.input-group input,
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.input-group input,
+textarea:focus {
+    border-color: #3c83f6;
+}
+
+.login-button {
+    width: 100%;
+    padding: 12px;
+    background: #3c83f6;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 1rem;
+    margin-left: 10px;
+}
+
+.cancel-button {
+    width: 100%;
+    padding: 12px;
+    background: white;
+    border: 1px solid gray;
+    border-radius: 8px;
+    color: grey;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 1rem;
+    margin-right: 10px;
+}
+
+.container-modal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.input-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+
+h2 {
+    font-size: 1rem;
+}

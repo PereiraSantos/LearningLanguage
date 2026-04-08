@@ -1,0 +1,17 @@
+.header {
+    background-color: #3788f4;
+    text-align: center;
+}
+
+h1 {
+    color: white;
+    font-size: 1.5rem;
+    padding-top: 5px;
+    font-family: "Gill Sans", sans-serif;
+}
+
+p {
+    color: white;
+    padding-bottom: 10px;
+    font-family: "Gill Sans", sans-serif;
+}

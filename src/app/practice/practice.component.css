@@ -1,0 +1,359 @@
+.body-practice {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    align-items: start;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    overflow: hidden;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    width: 100%;
+}
+
+textarea {
+    width: 100%;
+    height: 120px;
+    padding-left: 10px;
+    padding-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    resize: vertical;
+    font-family: inherit;
+    box-sizing: border-box;
+    background-color: #f6f7f9;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    /* Alinha contador à esquerda e botão à direita */
+    align-items: center;
+    margin-top: 12px;
+}
+
+.char-count {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.btn-save {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.btn-save:hover {
+    background-color: #0056b3;
+}
+
+/* PRACTICE */
+
+.input-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+
+input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    background-color: #f6f7f9;
+}
+
+input:focus {
+    border-color: #007bff;
+}
+
+.char-counter {
+    display: block;
+    color: #666;
+    font-size: 12px;
+    margin-bottom: 15px;
+}
+
+.item-list {
+    border-top: 1px solid #eee;
+    border-radius: 8px;
+    background-color: #f6f7f9;
+    margin-bottom: 5px;
+}
+
+.container-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 10px;
+    padding-left: 10px;
+    height: 25px;
+}
+
+h4 {
+    font-size: 0.9rem;
+    font-weight: 500;
+
+}
+
+.divider {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    background-color: white;
+}
+
+.btn-remove {
+    background: none;
+    border: none;
+    color: #ff4d4d;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+button {
+    cursor: pointer;
+    border-radius: 4px;
+    border: none;
+    transition: opacity 0.2s;
+}
+
+.btn-add {
+    background-color: #28a745;
+    color: white;
+    padding: 0 15px;
+}
+
+.btn-save {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 25px;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+    opacity: 0.8;
+}
+
+/* AUDIO */
+.audio-card {
+    width: 100%;
+    max-width: 450px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 12px;
+    font-family: sans-serif;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 5px 10px;
+}
+
+.status-display {
+    flex-grow: 1;
+    font-size: 14px;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+
+.btn-action {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-action:hover {
+    background: #ececec;
+}
+
+.btn-action.recording {
+    color: #ff4d4d;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.audio-card {
+    width: 100%;
+    max-width: 500px;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 15px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+
+.dashed-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border: 2px dashed #b0b0b0;
+    /* Borda trasejada */
+    border-radius: 12px;
+    background-color: #fafafa;
+    transition: border-color 0.3s ease;
+}
+
+.dashed-wrapper:hover {
+    border-color: #7c4dff;
+    /* Muda a cor ao passar o mouse */
+}
+
+.status-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex-grow: 1;
+}
+
+.instruction-text {
+    font-weight: 600;
+    color: #333;
+    font-size: 15px;
+}
+
+.file-info {
+    color: #888;
+    font-size: 12px;
+}
+
+.btn-action {
+    background: #ffffff;
+    border: 1px solid #eee;
+    cursor: pointer;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.btn-action.recording {
+    color: #ff4444;
+    border-color: #ff4444;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(255, 68, 68, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 68, 68, 0);
+    }
+}
+
+.data {
+    padding-left: 2px;
+    border-radius: 5px;
+    margin-top: 2px;
+}
+
+h2 {
+    font-weight: 600;
+    font-size: 1rem;
+    color: rgb(54, 54, 54);
+
+}
+
+h3 {
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: gray;
+
+}
+
+.card-list {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    overflow: hidden;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+}
+
+.category-badge {
+    border-radius: 9px;
+    border: 1px solid rgb(196, 194, 194);
+    margin-top: 10px;
+    padding-left: 10px;
+
+}
+
+.category-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgb(31, 30, 30);
+    height: 22px;
+    padding-bottom: 2px;
+}

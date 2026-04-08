@@ -1,0 +1,60 @@
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">Categorias</h2>
+        <button class="btn-new" (click)="modal.abrir()">+ Nova Categoria</button>
+    </div>
+
+    <div class="card-content">
+        <div class="category-list">
+            @for (cat of categorys(); track cat.id) {
+            <div class="category-badge">
+                <div class="card-header-word">
+                    <span class="category-name">{{ cat.name }}</span>
+                    <button class="btn-delete" (click)="removeCategory(cat.id)" aria-label="Excluir">
+                        &times;
+                    </button>
+                </div>
+                <div class="category-word">
+                    @for (cat of cat.words; track cat.id) {
+                    <div class="category-badge-word">
+                        <span class="category-name-word">{{ cat.name }}</span>
+                        <button class="btn-delete" (click)="removeCategory(cat.id)" aria-label="Excluir">
+                            &times;
+                        </button>
+                    </div>
+                    }
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</div>
+
+<app-modal #modal titulo="Novo Projeto">
+    <form>
+        <div class="input-group">
+            <label for="nameProject">Categoria</label>
+            <input type="text" name="nameProject" [(ngModel)]="projectData.nameProject" required>
+        </div>
+
+        <div class="input-row input-group">
+            <label for="nameProject">Palavras</label>
+            <input type="text" name="word" [(ngModel)]="projectData.word">
+            <button class="btn-add" (click)="addItem()">Adicionar</button>
+        </div>
+
+        @for (cat of words(); track cat.id) {
+        <div class="category-badge">
+            <span class="category-name">{{ cat.name }}</span>
+            <button class="btn-delete" (click)="removeCategory(cat.id)" aria-label="Excluir">
+                &times;
+            </button>
+        </div>
+        }
+
+        <div class="container-modal">
+            <button class="cancel-button" (click)="modal.fechar()">Cancelar</button>
+            <button s (click)="salvar(modal)" class="login-button">Criar</button>
+        </div>
+    </form>
+</app-modal>

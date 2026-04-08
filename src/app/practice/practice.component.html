@@ -1,0 +1,97 @@
+<div class="body-practice">
+    <div class="card">
+        <div class="card-content">
+            <h2>Texto prático</h2>
+            <h3>Escreva um texto longo para praticar.</h3>
+            <textarea id="input-text" [(ngModel)]="currentTextLong" maxlength="1000" (input)="updateCount()">
+    </textarea>
+
+            <div class="footer">
+                <span class="char-count">
+                    {{ charCount() }} / 1000
+                </span>
+                <button class="btn-save" (click)="saveContent()">
+                    Salvar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Texto curto</h2>
+        <h3>Escreva um texto curto para praticar.</h3>
+        <div class="input-row">
+            <input type="text" [(ngModel)]="currentText" maxlength="100" (keyup.enter)="addItem()">
+            <button class="btn-add" (click)="addItem()">Adicionar</button>
+        </div>
+
+        <small class="char-counter">{{ currentText.length }}/100</small>
+
+
+        @for (item of items; track $index) {
+        <div class="item-list">
+            <div class="container-item">
+                <h4>{{ item }}</h4>
+                <button class="btn-remove" (click)="removeItem($index)">✕</button>
+            </div>
+        </div>
+
+        } @empty {
+        <div class="empty-msg">Nenhum texto adicionado.</div>
+        }
+
+
+        <div class="actions">
+            <button class="btn-save" [disabled]="items.length === 0" (click)="saveAll()">
+                Salvar
+            </button>
+        </div>
+    </div>
+</div>
+<!--
+<div class="audio-card">
+    <div class="dashed-wrapper">
+        <button type="button" class="btn-action" (click)="fileInput.click()" title="Upload de Áudio">
+            <span class="icon">📁</span>
+        </button>
+        <input #fileInput type="file" (change)="handleUpload($event)" accept="audio/*" hidden>
+
+        <div class="status-display">
+            <span class="instruction-text">Upload an audio file</span>
+            <small class="file-info">{{ isRecording ? 'Gravando...' : fileName }}</small>
+        </div>
+
+        <button type="button" class="btn-action" [class.recording]="isRecording" (click)="toggleRecording()"
+            title="Gravar Áudio">
+            <span class="icon">{{ isRecording ? '⏹️' : '🎤' }}</span>
+        </button>
+    </div>
+</div>
+-->
+<div class="card-list">
+    <h2> Texto prático</h2>
+    @for (text of textLongInfos(); track text.creation) {
+    <div class="category-badge">
+        <h3 class="data">Data: {{ text.creation | date:'dd/MM/yyyy' }} </h3>
+        @for (textLong of text.textLongs; track textLong.id) {
+        <div class="category-name">
+            <span>{{ textLong.value }} </span>
+        </div>
+        }
+    </div>
+    }
+</div>
+
+<div class="card-list">
+    <h2> Texto curto</h2>
+    @for (text of textSmallInfos(); track text.creation) {
+    <div class="category-badge">
+        <h3 class="data">Data: {{ text.creation | date:'dd/MM/yyyy' }} </h3>
+        @for (textSmall of text.textSmalls; track textSmall.creation) {
+        <div class="category-name">
+            <span>{{ textSmall.value }} </span>
+        </div>
+        }
+    </div>
+    }
+</div>
