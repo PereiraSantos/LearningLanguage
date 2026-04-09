@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class TextSmallService {
 
-    private apiUrl = 'http://localhost:3000/api/textsmall';
+    private apiUrl = 'http://localhost:3001/api/textsmall';
 
     constructor(private http: HttpClient) { }
 

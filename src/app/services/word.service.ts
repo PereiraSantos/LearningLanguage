@@ -8,7 +8,7 @@ import { Word } from '../entities/word';
 })
 export class WordService {
 
-    private apiUrl = 'http://localhost:3000/api/word';
+    private apiUrl = 'http://localhost:3001/api/word';
 
     constructor(private http: HttpClient) { }
 

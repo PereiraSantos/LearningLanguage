@@ -30,21 +30,21 @@
     </div>
 </div>
 
-<app-modal #modal titulo="Novo Projeto">
+<app-modal #modal titulo="Nova categoria" style="color: rgb(88, 88, 88);">
     <form>
         <div class="input-group">
             <label for="nameProject">Categoria</label>
             <input type="text" name="nameProject" [(ngModel)]="projectData.nameProject" required>
         </div>
-
+        <label for="nameProject">Palavras</label>
         <div class="input-row input-group">
-            <label for="nameProject">Palavras</label>
+
             <input type="text" name="word" [(ngModel)]="projectData.word">
             <button class="btn-add" (click)="addItem()">Adicionar</button>
         </div>
 
         @for (cat of words(); track cat.id) {
-        <div class="category-badge">
+        <div class="category-badge-modal">
             <span class="category-name">{{ cat.name }}</span>
             <button class="btn-delete" (click)="removeCategory(cat.id)" aria-label="Excluir">
                 &times;

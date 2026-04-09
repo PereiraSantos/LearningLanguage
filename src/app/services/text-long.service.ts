@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class TextLongService {
 
-    private apiUrl = 'http://localhost:3000/api/textlong';
+    private apiUrl = 'http://localhost:3001/api/textlong';
 
     constructor(private http: HttpClient) { }
 

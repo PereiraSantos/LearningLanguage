@@ -127,6 +127,7 @@ export class PracticeComponent implements OnInit {
     createListTextSmall(list: any[]) {
         this.textSmallInfos.update(item => []);
         this.items = [];
+        this.currentText = '';
 
         this.findDateTextSmall(list);
 

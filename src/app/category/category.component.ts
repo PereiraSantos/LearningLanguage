@@ -85,6 +85,7 @@ export class CategoryComponent implements OnInit {
 
     createList(list: any[]) {
         this.categorys.update(item => []);
+        this.words.update(item => [])
 
         for (const category of list) {
 
