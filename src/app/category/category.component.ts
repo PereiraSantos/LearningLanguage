@@ -1,69 +1,78 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ModalComponent } from '../component/modal/modal.component';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Category } from '../entities/category';
 import { Word } from '../entities/word';
 import { CategoryService } from '../services/category.service';
 import { ToastService } from '../services/toast.service';
 import { WordService } from '../services/word.service';
 
+
 @Component({
     selector: 'app-category',
     standalone: true,
-    imports: [ModalComponent, FormsModule],
+    imports: [ModalComponent, FormsModule, ReactiveFormsModule],
     templateUrl: './category.component.html',
     styleUrls: ['./category.component.css']
 })
 export class CategoryComponent implements OnInit {
     private toastService = inject(ToastService);
 
-    constructor(private categoryService: CategoryService, private wordService: WordService) { }
+    categorys = signal<Category[]>([]);
+    words = signal<Word[]>([]);
+    wordAdds = signal<Word[]>([]);
+    workForm!: FormGroup
+    categoryForm!: FormGroup;
+
+
+    constructor(private categoryService: CategoryService, private wordService: WordService, public fb: FormBuilder) { }
 
     ngOnInit(): void {
+        this.initForm();
         this.getCategorys();
     }
 
-    projectData = {
-        nameProject: '',
-        word: '',
-    };
+    initForm() {
+        this.categoryForm = this.fb.group({
+            name: ['', [Validators.required, Validators.maxLength(100)]],
+        });
 
-
-    categorys = signal<Category[]>([]);
-
-    words = signal<Word[]>([]);
+        this.workForm = this.fb.group({
+            word: ['', [Validators.required, Validators.maxLength(100)]]
+        });
+    }
 
     removeCategory(id: number) {
-        this.categorys.update(prev => prev.filter(c => c.id !== id));
+        this.wordAdds.update(prev => prev.filter(c => c.id !== id));
     }
 
 
     closeModal(modal: any) {
         modal.fechar();
-        this.projectData.nameProject = '';
-
+        this.categoryForm.get('name')!.reset();
     }
 
     salvar(modal: any) {
-        modal.fechar();
+        if (this.categoryForm.valid) {
+            modal.fechar();
 
-        this.categoryService.saveCategory(this.projectData.nameProject).subscribe({
-            next: (response) => {
-                this.toastService.show('Projetos salvo com sucesso!', 'info');
-                this.salvarWords(response);
-
-            },
-            error: (error) => {
-                this.toastService.show('Projetos ou senha inválidos!', 'error');
-            }
-        });
+            this.categoryService.saveCategory(this.categoryForm.value.name).subscribe({
+                next: (response) => {
+                    this.toastService.show('Projetos salvo com sucesso!', 'info');
+                    this.salvarWords(response);
+                },
+                error: (error) => {
+                    this.toastService.show('Projetos ou senha inválidos!', 'error');
+                }
+            });
+        }
     }
 
     salvarWords(response: any) {
-        this.wordService.saveWord(this.words(), response['id']).subscribe({
+        this.wordService.saveWord(this.wordAdds(), response['id']).subscribe({
             next: (response) => {
                 this.toastService.show('Projetos salvo com sucesso!', 'info');
-                this.projectData.nameProject = '';
+                this.categoryForm.get('name')!.reset();
                 this.getCategorys();
             },
             error: (error) => {
@@ -86,6 +95,7 @@ export class CategoryComponent implements OnInit {
     createList(list: any[]) {
         this.categorys.update(item => []);
         this.words.update(item => [])
+        this.wordAdds.update(item => []);
 
         for (const category of list) {
 
@@ -102,8 +112,10 @@ export class CategoryComponent implements OnInit {
 
 
     addItem() {
-        this.words.update(item => [...item, new Word(this.words().length, this.projectData.word, -1)]);
-        this.projectData.word = '';
+        if (this.workForm.valid) {
+            this.wordAdds.update(item => [...item, new Word(this.wordAdds().length, this.workForm.value.word, -1)]);
+            this.workForm.get('word')!.reset();
+        }
     }
 
 }

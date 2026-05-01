@@ -3,12 +3,17 @@
         <div class="card-content">
             <h2>Texto prático</h2>
             <h3>Escreva um texto longo para praticar.</h3>
-            <textarea id="input-text" [(ngModel)]="currentTextLong" maxlength="1000" (input)="updateCount()">
-    </textarea>
+            <form [formGroup]="textLongForm">
+                <textarea id="input-text" formControlName="value" maxlength="1000"
+                    (input)="updateCountTexLong()"></textarea>
+                @if (textLongForm.get('value')?.invalid && textLongForm.get('value')?.touched) {
+                <div class="required-value">Texto é obrigatório.</div>
+                }
+            </form>
 
             <div class="footer">
                 <span class="char-count">
-                    {{ charCount() }} / 1000
+                    {{ charCountTextLong() }}/1000
                 </span>
                 <button class="btn-save" (click)="saveContent()">
                     Salvar
@@ -21,11 +26,19 @@
         <h2>Texto curto</h2>
         <h3>Escreva um texto curto para praticar.</h3>
         <div class="input-row">
-            <input type="text" [(ngModel)]="currentText" maxlength="100" (keyup.enter)="addItem()">
+            <form [formGroup]="textForm">
+                <input type="text" formControlName="value" maxlength="100" (keyup.enter)="addItem()"
+                    (input)="updateCountTex()">
+            </form>
+
             <button class="btn-add" (click)="addItem()">Adicionar</button>
         </div>
 
-        <small class="char-counter">{{ currentText.length }}/100</small>
+        @if (textForm.get('value')?.invalid && textForm.get('value')?.touched) {
+        <div class="required-value">Texto é obrigatório.</div>
+        }
+
+        <small class="char-counter">{{ charCountText() }}/100</small>
 
 
         @for (item of items; track $index) {

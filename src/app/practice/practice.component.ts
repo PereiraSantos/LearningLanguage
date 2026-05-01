@@ -1,5 +1,5 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TextLongService } from '../services/text-long.service';
 import { TextSmallService } from '../services/text-small.servie';
 import { ToastService } from '../services/toast.service';
@@ -13,7 +13,7 @@ import { DatePipe } from '@angular/common';
 @Component({
     selector: 'app-practice',
     standalone: true,
-    imports: [FormsModule, DatePipe],
+    imports: [FormsModule, DatePipe, ReactiveFormsModule],
     templateUrl: './practice.component.html',
     styleUrls: ['./practice.component.css']
 })
@@ -21,12 +21,12 @@ export class PracticeComponent implements OnInit {
 
     private toastService = inject(ToastService);
 
-    constructor(private textLongService: TextLongService, private textSmallService: TextSmallService) { }
+    constructor(private textLongService: TextLongService, private textSmallService: TextSmallService, public fb: FormBuilder) { }
 
-
-    charCount = signal(0);
-    currentTextLong: string = '';
-    currentText: string = '';
+    charCountTextLong = signal(0);
+    charCountText = signal(0);
+    textLongForm!: FormGroup
+    textForm!: FormGroup
     items: string[] = [];
     fileName: string = '';
     isRecording: boolean = false;
@@ -36,25 +36,42 @@ export class PracticeComponent implements OnInit {
     textSmallInfos = signal<TextSmallInfo[]>([]);
 
     ngOnInit(): void {
+        this.initForm();
         this.getTextLong();
         this.getTextSmall();
     }
 
-    updateCount() {
-        this.charCount.set(this.currentTextLong.length);
+    initForm() {
+        this.textLongForm = this.fb.group({
+            value: ['', [Validators.required, Validators.maxLength(1100)]],
+        });
+
+        this.textForm = this.fb.group({
+            value: ['', [Validators.required, Validators.maxLength(1100)]]
+        });
+    }
+
+    updateCountTexLong() {
+        this.charCountTextLong.set((this.textLongForm.value.value).length);
+    }
+
+    updateCountTex() {
+        this.charCountText.set((this.textForm.value.value).length);
     }
 
     saveContent() {
-        this.textLongService.saveTextLong(this.currentTextLong).subscribe({
-            next: (response) => {
-                this.toastService.show('Texto salvo com sucesso!', 'info');
-                this.getTextLong();
-                this.currentTextLong = '';
-            },
-            error: (error) => {
-                this.toastService.show('Projetos ou senha inválidos!', 'error');
-            }
-        });
+        if (this.textLongForm.valid) {
+            this.textLongService.saveTextLong(this.textLongForm.value.value).subscribe({
+                next: (response) => {
+                    this.toastService.show('Texto salvo com sucesso!', 'info');
+                    this.getTextLong();
+                    this.textLongForm.get('value')!.reset();
+                },
+                error: (error) => {
+                    this.toastService.show('Projetos ou senha inválidos!', 'error');
+                }
+            });
+        }
     }
 
     getTextLong() {
@@ -127,7 +144,7 @@ export class PracticeComponent implements OnInit {
     createListTextSmall(list: any[]) {
         this.textSmallInfos.update(item => []);
         this.items = [];
-        this.currentText = '';
+        this.textForm.get('value')!.reset();
 
         this.findDateTextSmall(list);
 
@@ -160,10 +177,12 @@ export class PracticeComponent implements OnInit {
     }
 
     addItem() {
-        const text = this.currentText.trim();
-        if (text) {
-            this.items.push(text);
-            this.currentText = '';
+        if (this.textForm.valid) {
+            const text = this.textForm.value.value.trim();
+            if (text) {
+                this.items.push(text);
+                this.textForm.get('value')!.reset();
+            }
         }
     }
 

@@ -1,17 +1,19 @@
 .header {
-    background-color: #3788f4;
-    text-align: center;
+    background-color: #f9fafb;
+    text-align: left;
+    padding-left: 20px;
 }
 
 h1 {
-    color: white;
+    color: #3788f4;
     font-size: 1.5rem;
     padding-top: 5px;
-    font-family: "Gill Sans", sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 p {
-    color: white;
+    color: #3788f4;
     padding-bottom: 10px;
-    font-family: "Gill Sans", sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1.1rem;
 }

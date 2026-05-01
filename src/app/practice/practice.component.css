@@ -74,6 +74,7 @@ textarea:focus {
 }
 
 input {
+    width: 90%;
     flex: 1;
     padding: 8px 12px;
     border: 1px solid #ccc;
@@ -357,4 +358,12 @@ h3 {
     color: rgb(31, 30, 30);
     height: 22px;
     padding-bottom: 2px;
+}
+
+.required-value {
+    color: #d32f2f;
+}
+
+form {
+    width: 100%;
 }

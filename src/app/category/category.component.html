@@ -31,19 +31,27 @@
 </div>
 
 <app-modal #modal titulo="Nova categoria" style="color: rgb(88, 88, 88);">
-    <form>
+    <form [formGroup]="categoryForm">
         <div class="input-group">
             <label for="nameProject">Categoria</label>
-            <input type="text" name="nameProject" [(ngModel)]="projectData.nameProject" required>
+            <input type="text" name="name" formControlName="name">
+            @if (categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched) {
+            <div class="required-value">Categoria é obrigatório.</div>
+            }
         </div>
+    </form>
+    <form [formGroup]="workForm">
         <label for="nameProject">Palavras</label>
         <div class="input-row input-group">
-
-            <input type="text" name="word" [(ngModel)]="projectData.word">
+            <input type="text" name="word" formControlName="word">
             <button class="btn-add" (click)="addItem()">Adicionar</button>
         </div>
 
-        @for (cat of words(); track cat.id) {
+        @if (workForm.get('word')?.invalid && workForm.get('word')?.touched) {
+        <div class="required-value">Palavras é obrigatório.</div>
+        }
+
+        @for (cat of wordAdds(); track cat.id) {
         <div class="category-badge-modal">
             <span class="category-name">{{ cat.name }}</span>
             <button class="btn-delete" (click)="removeCategory(cat.id)" aria-label="Excluir">
