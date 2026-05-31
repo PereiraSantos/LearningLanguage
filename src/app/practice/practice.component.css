@@ -1,8 +1,5 @@
 .body-practice {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-    align-items: start;
+    padding-right: 40px;
 }
 
 .card {
@@ -167,7 +164,7 @@ button:hover:not(:disabled) {
 
 /* AUDIO */
 .audio-card {
-    width: 100%;
+
     max-width: 450px;
     background: #ffffff;
     border-radius: 12px;
@@ -331,34 +328,7 @@ h3 {
 
 }
 
-.card-list {
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    margin-top: 10px;
-    margin-left: 2px;
-    margin-right: 2px;
-    padding: 20px;
-    border: 1px solid #e0e0e0;
-    overflow: hidden;
-    font-family: 'Segoe UI', Roboto, sans-serif;
-}
 
-.category-badge {
-    border-radius: 9px;
-    border: 1px solid rgb(196, 194, 194);
-    margin-top: 10px;
-    padding-left: 10px;
-
-}
-
-.category-name {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: rgb(31, 30, 30);
-    height: 22px;
-    padding-bottom: 2px;
-}
 
 .required-value {
     color: #d32f2f;

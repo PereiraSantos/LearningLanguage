@@ -1,0 +1,25 @@
+<mat-sidenav-container class="app-container">
+    <mat-sidenav #sidenav mode="side" opened>
+        <mat-toolbar color="primary">Home</mat-toolbar>
+        <mat-nav-list>
+            <a class="item" mat-list-item routerLinkActive="active-link" routerLink="/category">
+                <span matListItemTitle>Categorias</span>
+            </a>
+            <a class="item" mat-list-item routerLinkActive="active-link" routerLink="/practice">
+                <span matListItemTitle>Pratique</span>
+            </a>
+            <a class="item" mat-list-item routerLinkActive="active-link" routerLink="/practice-list">
+                <span matListItemTitle>Pratique lista</span>
+            </a>
+            <!-- <a class="exit" mat-list-item routerLink="/login">
+                <span matListItemTitle>Sair</span>
+            </a>-->
+        </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <div class="main-content">
+            <router-outlet></router-outlet>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { ModalComponent } from '../component/modal/modal.component';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Category } from '../entities/category';
@@ -13,7 +13,8 @@ import { WordService } from '../services/word.service';
     standalone: true,
     imports: [ModalComponent, FormsModule, ReactiveFormsModule],
     templateUrl: './category.component.html',
-    styleUrls: ['./category.component.css']
+    styleUrls: ['./category.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CategoryComponent implements OnInit {
     private toastService = inject(ToastService);

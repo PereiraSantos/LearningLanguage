@@ -1,0 +1,27 @@
+<div class="card-list">
+    <h2> Texto prático</h2>
+    @for (text of textLongInfos(); track text.creation) {
+    <div class="category-badge">
+        <h3 class="data">Data: {{ text.creation | date:'dd/MM/yyyy' }} </h3>
+        @for (textLong of text.textLongs; track textLong.id) {
+        <div class="category-name">
+            <span>{{ textLong.value }} </span>
+        </div>
+        }
+    </div>
+    }
+</div>
+
+<div class="card-list">
+    <h2> Texto curto</h2>
+    @for (text of textSmallInfos(); track text.creation) {
+    <div class="category-badge">
+        <h3 class="data">Data: {{ text.creation | date:'dd/MM/yyyy' }} </h3>
+        @for (textSmall of text.textSmalls; track textSmall.creation) {
+        <div class="category-name">
+            <span>{{ textSmall.value }} </span>
+        </div>
+        }
+    </div>
+    }
+</div>
