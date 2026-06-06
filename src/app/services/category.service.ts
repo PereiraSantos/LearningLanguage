@@ -21,4 +21,11 @@ export class CategoryService {
             name: name
         });
     }
+
+    editCategory(name: string, id: number): Observable<any> {
+        return this.http.put(`${this.API_URL}/api/category`, {
+            name: name,
+            id: id
+        });
+    }
 }

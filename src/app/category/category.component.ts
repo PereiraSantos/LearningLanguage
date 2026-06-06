@@ -6,12 +6,13 @@ import { Word } from '../entities/word';
 import { CategoryService } from '../services/category.service';
 import { ToastService } from '../services/toast.service';
 import { WordService } from '../services/word.service';
+import { MatIconModule } from '@angular/material/icon'
 
 
 @Component({
     selector: 'app-category',
     standalone: true,
-    imports: [ModalComponent, FormsModule, ReactiveFormsModule],
+    imports: [ModalComponent, FormsModule, ReactiveFormsModule, MatIconModule],
     templateUrl: './category.component.html',
     styleUrls: ['./category.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,6 +25,8 @@ export class CategoryComponent implements OnInit {
     wordAdds = signal<Word[]>([]);
     workForm!: FormGroup
     categoryForm!: FormGroup;
+    category?: Category = undefined;
+    word?: Word = undefined;
 
 
     constructor(private categoryService: CategoryService, private wordService: WordService, public fb: FormBuilder) { }
@@ -43,14 +46,20 @@ export class CategoryComponent implements OnInit {
         });
     }
 
-    removeCategory(id: number) {
+    editCategory(id: number) {
         this.wordAdds.update(prev => prev.filter(c => c.id !== id));
     }
 
+    openModalCategory(modal: any, category: Category) {
+        this.category = category;
+        this.categoryForm.patchValue({ name: category.name });
+        modal.abrir();
+    }
 
-    closeModal(modal: any) {
-        modal.fechar();
-        this.categoryForm.get('name')!.reset();
+    openModalWord(modal: any, word: Word) {
+        this.word = word;
+        this.workForm.patchValue({ word: word.name });
+        modal.abrir();
     }
 
     salvar(modal: any) {
@@ -69,11 +78,45 @@ export class CategoryComponent implements OnInit {
         }
     }
 
+    edit(modal: any) {
+        if (this.categoryForm.valid && this.category != undefined) {
+            modal.fechar();
+
+            this.categoryService.editCategory(this.categoryForm.value.name, this.category.id).subscribe({
+                next: (response) => {
+                    this.toastService.show('Projetos editado com sucesso!', 'info');
+                    this.categoryForm.get('name')!.reset();
+                    this.getCategorys();
+                },
+                error: (error) => {
+                    this.toastService.show('Projetos ou senha inválidos!', 'error');
+                }
+            });
+        }
+    }
+
+    editWord(modal: any) {
+        if (this.workForm.valid && this.word != undefined) {
+            modal.fechar();
+
+            this.wordService.editWord(this.workForm.value.word, this.word.id).subscribe({
+                next: (response) => {
+                    this.toastService.show('Projetos editaado com sucesso!', 'info');
+                    this.workForm.get('word')!.reset();
+                    this.getCategorys();
+                },
+                error: (error) => {
+                    this.toastService.show('Projetos ou senha inválidos!', 'error');
+                }
+            });
+        }
+    }
+
     salvarWords(response: any) {
         this.wordService.saveWord(this.wordAdds(), response['id']).subscribe({
             next: (response) => {
                 this.toastService.show('Projetos salvo com sucesso!', 'info');
-                this.categoryForm.get('name')!.reset();
+                this.workForm.get('word')!.reset();
                 this.getCategorys();
             },
             error: (error) => {
@@ -81,6 +124,7 @@ export class CategoryComponent implements OnInit {
             }
         });
     }
+
     getCategorys() {
         this.categoryService.getCategorys().subscribe({
             next: (response) => {

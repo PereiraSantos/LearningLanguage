@@ -23,6 +23,12 @@ export class WordService {
         });
     }
 
+    editWord(word: string, id: number): Observable<any> {
+        return this.http.put(`${this.API_URL}/api/word`, {
+            word: word, id: id
+        });
+    }
+
     getWordBycatgory(idCategory: number): Observable<any> {
         return this.http.post(`${this.API_URL}/api/word` + '/category', {
             idCategory: idCategory
