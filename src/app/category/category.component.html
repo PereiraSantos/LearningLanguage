@@ -10,9 +10,11 @@
             <div class="category-badge">
                 <div class="card-header-word">
                     <span class="category-name">{{ cat.name }}</span>
-                    <button class="btn-delete" (click)="openModalCategory(modalEditCategory, cat)" aria-label="editar">
+                    <button class="btn-delete custon" (click)="openModalCategory(modalEditCategory, cat)"
+                        aria-label="editar">
                         <mat-icon class="mat-icon" fontIcon="edit"></mat-icon>
                     </button>
+
                 </div>
                 <div class="category-word">
                     @for (cat of cat.words; track cat.id) {
@@ -23,6 +25,9 @@
                         </button>
                     </div>
                     }
+                    <button class="btn-delete custon-add" (click)="openModalWordAdd(addWord, cat)" aria-label="editar">
+                        <mat-icon color="primary" class="mat-icon" fontIcon="add" color="warn"></mat-icon>
+                    </button>
                 </div>
             </div>
             }
@@ -99,5 +104,22 @@
     <div class="container-modal">
         <button class="cancel-button" (click)="modalEditWord.fechar()">Cancelar</button>
         <button s (click)="editWord(modalEditWord)" class="login-button">Editar</button>
+    </div>
+</app-modal>
+
+<app-modal #addWord titulo="Adicionar Palavra" style="color: rgb(88, 88, 88);">
+    <form [formGroup]="workForm">
+        <div class="input-group">
+            <label for="nameProject">Palavra</label>
+            <input type="text" name="word" formControlName="word">
+            @if (workForm.get('word')?.invalid && workForm.get('word')?.touched) {
+            <div class="required-value">Palavras é obrigatório.</div>
+            }
+        </div>
+    </form>
+
+    <div class="container-modal">
+        <button class="cancel-button" (click)="addWord.fechar()">Cancelar</button>
+        <button s (click)="insertWord(addWord)" class="login-button">Adicionar</button>
     </div>
 </app-modal>

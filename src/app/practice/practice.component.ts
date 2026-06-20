@@ -76,6 +76,10 @@ export class PracticeComponent implements OnInit {
             next: (response) => {
                 this.toastService.show('Texto salvo com sucesso!', 'info');
 
+                this.textForm.get('value')!.reset();
+
+                this.items = [];
+
             },
             error: (error) => {
                 this.toastService.show('Projetos ou senha inválidos!', 'error');

@@ -29,6 +29,7 @@ export class CategoryComponent implements OnInit {
     word?: Word = undefined;
 
 
+
     constructor(private categoryService: CategoryService, private wordService: WordService, public fb: FormBuilder) { }
 
     ngOnInit(): void {
@@ -62,6 +63,12 @@ export class CategoryComponent implements OnInit {
         modal.abrir();
     }
 
+    openModalWordAdd(modal: any, category: Category) {
+        this.category = category;
+        this.workForm.patchValue({ word: '' });
+        modal.abrir();
+    }
+
     salvar(modal: any) {
         if (this.categoryForm.valid) {
             modal.fechar();
@@ -69,7 +76,7 @@ export class CategoryComponent implements OnInit {
             this.categoryService.saveCategory(this.categoryForm.value.name).subscribe({
                 next: (response) => {
                     this.toastService.show('Projetos salvo com sucesso!', 'info');
-                    this.salvarWords(response);
+                    this.salvarWords(response['id']);
                 },
                 error: (error) => {
                     this.toastService.show('Projetos ou senha inválidos!', 'error');
@@ -112,8 +119,16 @@ export class CategoryComponent implements OnInit {
         }
     }
 
-    salvarWords(response: any) {
-        this.wordService.saveWord(this.wordAdds(), response['id']).subscribe({
+    insertWord(modal: any) {
+        if (this.workForm.valid && this.category != undefined) {
+            this.addItem();
+            modal.fechar();
+            this.salvarWords(this.category!.id);
+        }
+    }
+
+    salvarWords(id: any) {
+        this.wordService.saveWord(this.wordAdds(), id).subscribe({
             next: (response) => {
                 this.toastService.show('Projetos salvo com sucesso!', 'info');
                 this.workForm.get('word')!.reset();
