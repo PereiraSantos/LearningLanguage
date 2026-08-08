@@ -1,0 +1,13 @@
+<div class="card-list">
+    <h2>Diálogos</h2>
+    @for (text of textLongInfos(); track text.creation) {
+    <div class="category-badge">
+        <h3 class="data">Data: {{ text.creation | date:'dd/MM/yyyy' }} </h3>
+        @for (textLong of text.textLongs; track textLong.id) {
+        <div class="category-name">
+            <span>{{ textLong.value }} </span>
+        </div>
+        }
+    </div>
+    }
+</div>

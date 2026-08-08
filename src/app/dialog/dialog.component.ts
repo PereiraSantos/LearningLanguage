@@ -1,38 +1,34 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TextLongService } from '../services/text-long.service';
-import { TextSmallService } from '../services/text-small.servie';
 import { ToastService } from '../services/toast.service';
 
 import { TextLongInfo } from '../entities/text_long_info';
-import { TextSmallInfo } from '../entities/text_small_info';
 
 
 
 @Component({
-    selector: 'app-practice',
+    selector: 'app-dialog',
     standalone: true,
     imports: [FormsModule, ReactiveFormsModule],
-    templateUrl: './practice.component.html',
-    styleUrls: ['./practice.component.css']
+    templateUrl: './dialog.component.html',
+    styleUrls: ['./dialog.component.css']
 })
-export class PracticeComponent implements OnInit {
+export class DialogComponent implements OnInit {
 
     private toastService = inject(ToastService);
 
-    constructor(private textLongService: TextLongService, private textSmallService: TextSmallService, public fb: FormBuilder) { }
+    constructor(private textLongService: TextLongService, public fb: FormBuilder) { }
 
     charCountTextLong = signal(0);
-    charCountText = signal(0);
+
     textLongForm!: FormGroup
-    textForm!: FormGroup
     items: string[] = [];
     fileName: string = '';
     isRecording: boolean = false;
     mediaRecorder: any;
 
     textLongInfos = signal<TextLongInfo[]>([]);
-    textSmallInfos = signal<TextSmallInfo[]>([]);
 
     ngOnInit(): void {
         this.initForm();
@@ -42,18 +38,10 @@ export class PracticeComponent implements OnInit {
         this.textLongForm = this.fb.group({
             value: ['', [Validators.required, Validators.maxLength(1100)]],
         });
-
-        this.textForm = this.fb.group({
-            value: ['', [Validators.required, Validators.maxLength(1100)]]
-        });
     }
 
     updateCountTexLong() {
         this.charCountTextLong.set((this.textLongForm.value.value).length);
-    }
-
-    updateCountTex() {
-        this.charCountText.set((this.textForm.value.value).length);
     }
 
     saveContent() {
@@ -68,32 +56,6 @@ export class PracticeComponent implements OnInit {
                     this.toastService.show('Projetos ou senha inválidos!', 'error');
                 }
             });
-        }
-    }
-
-    saveAll() {
-        this.textSmallService.saveTextSmall(this.items).subscribe({
-            next: (response) => {
-                this.toastService.show('Texto salvo com sucesso!', 'info');
-
-                this.textForm.get('value')!.reset();
-
-                this.items = [];
-
-            },
-            error: (error) => {
-                this.toastService.show('Projetos ou senha inválidos!', 'error');
-            }
-        });
-    }
-
-    addItem() {
-        if (this.textForm.valid) {
-            const text = this.textForm.value.value.trim();
-            if (text) {
-                this.items.push(text);
-                this.textForm.get('value')!.reset();
-            }
         }
     }
 

@@ -1,30 +1,6 @@
-<div class="body-practice">
+<div class="body">
     <div class="card">
-        <div class="card-content">
-            <h2>Texto prático</h2>
-            <h3>Escreva um texto longo para praticar.</h3>
-            <form [formGroup]="textLongForm">
-                <textarea id="input-text" formControlName="value" maxlength="1000"
-                    (input)="updateCountTexLong()"></textarea>
-                @if (textLongForm.get('value')?.invalid && textLongForm.get('value')?.touched) {
-                <div class="required-value">Texto é obrigatório.</div>
-                }
-            </form>
-
-            <div class="footer">
-                <span class="char-count">
-                    {{ charCountTextLong() }}/1000
-                </span>
-                <button class="btn-save" (click)="saveContent()">
-                    Salvar
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div class="card">
-        <h2>Texto curto</h2>
-        <h3>Escreva um texto curto para praticar.</h3>
+        <h2>Anotação</h2>
         <div class="input-row">
             <form [formGroup]="textForm">
                 <input type="text" formControlName="value" maxlength="100" (keyup.enter)="addItem()"

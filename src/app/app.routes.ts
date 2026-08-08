@@ -1,8 +1,10 @@
 import { Routes } from '@angular/router';
 import { Home } from './home/home';
 import { CategoryComponent } from './category/category.component';
-import { PracticeComponent } from './practice/practice.component';
-import { PracticeListComponent } from './practice-list/practice-list.component';
+import { DialogComponent } from './dialog/dialog.component';
+import { AnnotationHistoryComponent } from './annotation-history/annotation-history.component';
+import { AnnotationComponent } from './annotation/annotation.component';
+import { DialogHistoryComponent } from './dialog-history/dialog-history.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -13,8 +15,10 @@ export const routes: Routes = [
         children: [
             { path: '', redirectTo: 'category', pathMatch: 'full' },
             { path: 'category', component: CategoryComponent },
-            { path: 'practice', component: PracticeComponent },
-            { path: 'practice-list', component: PracticeListComponent }
+            { path: 'dialog', component: DialogComponent },
+            { path: 'annotation', component: AnnotationComponent },
+            { path: 'dialog-history', component: DialogHistoryComponent },
+            { path: 'annotation-history', component: AnnotationHistoryComponent }
         ]
     }
 ];

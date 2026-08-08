@@ -1,0 +1,23 @@
+<div class="body">
+    <div class="card">
+        <div class="card-content">
+            <h2>Diálogo</h2>
+            <form [formGroup]="textLongForm">
+                <textarea id="input-text" formControlName="value" maxlength="1000"
+                    (input)="updateCountTexLong()"></textarea>
+                @if (textLongForm.get('value')?.invalid && textLongForm.get('value')?.touched) {
+                <div class="required-value">Texto é obrigatório.</div>
+                }
+            </form>
+
+            <div class="footer">
+                <span class="char-count">
+                    {{ charCountTextLong() }}/1000
+                </span>
+                <button class="btn-save" (click)="saveContent()">
+                    Salvar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

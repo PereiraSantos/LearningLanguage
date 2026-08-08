@@ -1,0 +1,13 @@
+<div class="card-list">
+    <h2>Anotações</h2>
+    @for (text of textSmallInfos(); track text.creation) {
+    <div class="category-badge">
+        <h3 class="data">Data: {{ text.creation | date:'dd/MM/yyyy' }} </h3>
+        @for (textSmall of text.textSmalls; track textSmall.creation) {
+        <div class="category-name">
+            <span>{{ textSmall.value }} </span>
+        </div>
+        }
+    </div>
+    }
+</div>
