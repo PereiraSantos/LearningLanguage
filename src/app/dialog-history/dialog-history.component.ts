@@ -5,12 +5,13 @@ import { ToastService } from '../services/toast.service';
 import { TextLong } from '../entities/text-long';
 import { TextLongInfo } from '../entities/text_long_info';
 import { DatePipe } from '@angular/common';
+import { TextFieldModule } from '@angular/cdk/text-field';
 
 
 @Component({
     selector: 'app-dialog-history',
     standalone: true,
-    imports: [FormsModule, DatePipe, ReactiveFormsModule],
+    imports: [FormsModule, DatePipe, ReactiveFormsModule, TextFieldModule],
     templateUrl: './dialog-history.component.html',
     styleUrls: ['./dialog-history.component.css']
 })

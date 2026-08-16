@@ -44,6 +44,20 @@ h2 {
     font-size: 0.9rem;
     font-weight: 500;
     color: rgb(31, 30, 30);
-    height: 22px;
     padding-bottom: 2px;
+}
+
+textarea {
+    width: 99%;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 20px;
+    box-sizing: border-box;
+    resize: none;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: inherit;
+    box-sizing: border-box;
+    background-color: #f6f7f9;
+    overflow: scroll;
 }

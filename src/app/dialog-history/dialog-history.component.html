@@ -5,7 +5,8 @@
         <h3 class="data">Data: {{ text.creation | date:'dd/MM/yyyy' }} </h3>
         @for (textLong of text.textLongs; track textLong.id) {
         <div class="category-name">
-            <span>{{ textLong.value }} </span>
+            <textarea type="text" [(ngModel)]="textLong.value" [disabled]="true" cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="10"></textarea>
         </div>
         }
     </div>
