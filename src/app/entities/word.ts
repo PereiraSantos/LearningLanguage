@@ -1,13 +1,22 @@
-
-export class Word {
+export interface WordDTO {
     id: number;
     name: string;
-    idCategory: number;
+    id_category: number;
+}
 
-    constructor(id: number, name: string, idCategory: number) {
-        this.id = id;
-        this.name = name;
-        this.idCategory = idCategory;
+export class Word {
+    constructor(
+        public id: number,
+        public name: string,
+        public idCategory: number,
+    ) { }
 
+    /** Palavra que ainda não foi persistida no backend. */
+    get isNew(): boolean {
+        return this.idCategory === -1;
+    }
+
+    static fromDTO(dto: WordDTO): Word {
+        return new Word(dto.id, dto.name, dto.id_category);
     }
 }

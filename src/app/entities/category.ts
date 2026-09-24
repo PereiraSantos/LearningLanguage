@@ -1,13 +1,20 @@
-import { Word } from "./word";
+import { Word, WordDTO } from './word';
 
-export class Category {
+export interface CategoryDTO {
     id: number;
     name: string;
-    words: Word[];
+    words?: WordDTO[];
+}
 
-    constructor(id: number, name: string, words: Word[]) {
-        this.id = id;
-        this.name = name;
-        this.words = words
+export class Category {
+    constructor(
+        public id: number,
+        public name: string,
+        public words: Word[] = [],
+    ) { }
+
+    static fromDTO(dto: CategoryDTO): Category {
+        const words = (dto.words ?? []).map(Word.fromDTO);
+        return new Category(dto.id, dto.name, words);
     }
 }

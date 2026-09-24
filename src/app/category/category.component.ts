@@ -1,13 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
-import { ModalComponent } from '../component/modal/modal.component';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+
+import { ModalComponent } from '../component/modal/modal.component';
+import { OpenableModal } from '../component/modal/modal.contract';
 import { Category } from '../entities/category';
 import { Word } from '../entities/word';
-import { CategoryService } from '../services/category.service';
-import { ToastService } from '../services/toast.service';
-import { WordService } from '../services/word.service';
-import { MatIconModule } from '@angular/material/icon'
-
+import { CategoryFacade } from './category.facade';
 
 @Component({
     selector: 'app-category',
@@ -16,166 +15,103 @@ import { MatIconModule } from '@angular/material/icon'
     templateUrl: './category.component.html',
     styleUrls: ['./category.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [CategoryFacade],
 })
 export class CategoryComponent implements OnInit {
-    private toastService = inject(ToastService);
+    private readonly fb = inject(FormBuilder);
+    private readonly facade = inject(CategoryFacade);
 
-    categorys = signal<Category[]>([]);
-    words = signal<Word[]>([]);
-    wordAdds = signal<Word[]>([]);
-    workForm!: FormGroup
-    categoryForm!: FormGroup;
-    category?: Category = undefined;
-    word?: Word = undefined;
+    readonly categories = this.facade.categories;
+    readonly pendingWords = this.facade.pendingWords;
 
+    readonly categoryForm: FormGroup = this.fb.group({
+        name: ['', [Validators.required, Validators.maxLength(100)]],
+    });
 
+    readonly wordForm: FormGroup = this.fb.group({
+        word: ['', [Validators.required, Validators.maxLength(100)]],
+    });
 
-    constructor(private categoryService: CategoryService, private wordService: WordService, public fb: FormBuilder) { }
+    private selectedCategory?: Category;
+    private selectedWord?: Word;
 
     ngOnInit(): void {
-        this.initForm();
-        this.getCategorys();
+        this.facade.loadCategories();
     }
 
-    initForm() {
-        this.categoryForm = this.fb.group({
-            name: ['', [Validators.required, Validators.maxLength(100)]],
-        });
+    // ----- Abertura de modais -----
 
-        this.workForm = this.fb.group({
-            word: ['', [Validators.required, Validators.maxLength(100)]]
-        });
-    }
-
-    editCategory(id: number) {
-        this.wordAdds.update(prev => prev.filter(c => c.id !== id));
-    }
-
-    openModalCategory(modal: any, category: Category) {
-        this.category = category;
+    openEditCategory(modal: OpenableModal, category: Category): void {
+        this.selectedCategory = category;
         this.categoryForm.patchValue({ name: category.name });
         modal.abrir();
     }
 
-    openModalWord(modal: any, word: Word) {
-        this.word = word;
-        this.workForm.patchValue({ word: word.name });
+    openEditWord(modal: OpenableModal, word: Word): void {
+        this.selectedWord = word;
+        this.wordForm.patchValue({ word: word.name });
         modal.abrir();
     }
 
-    openModalWordAdd(modal: any, category: Category) {
-        this.category = category;
-        this.workForm.patchValue({ word: '' });
+    openAddWord(modal: OpenableModal, category: Category): void {
+        this.selectedCategory = category;
+        this.facade.clearPendingWords();
+        this.wordForm.patchValue({ word: '' });
         modal.abrir();
     }
 
-    salvar(modal: any) {
-        if (this.categoryForm.valid) {
-            modal.fechar();
+    // ----- Ações de palavras no modal -----
 
-            this.categoryService.saveCategory(this.categoryForm.value.name).subscribe({
-                next: (response) => {
-                    this.toastService.show('Projetos salvo com sucesso!', 'info');
-                    this.salvarWords(response['id']);
-                },
-                error: (error) => {
-                    this.toastService.show('Projetos ou senha inválidos!', 'error');
-                }
-            });
+    addPendingWord(): void {
+        if (this.wordForm.invalid) {
+            return;
         }
+        this.facade.addPendingWord(this.wordForm.value.word);
+        this.wordForm.get('word')!.reset();
     }
 
-    edit(modal: any) {
-        if (this.categoryForm.valid && this.category != undefined) {
-            modal.fechar();
+    removePendingWord(id: number): void {
+        this.facade.removePendingWord(id);
+    }
 
-            this.categoryService.editCategory(this.categoryForm.value.name, this.category.id).subscribe({
-                next: (response) => {
-                    this.toastService.show('Projetos editado com sucesso!', 'info');
-                    this.categoryForm.get('name')!.reset();
-                    this.getCategorys();
-                },
-                error: (error) => {
-                    this.toastService.show('Projetos ou senha inválidos!', 'error');
-                }
-            });
+    // ----- Casos de uso -----
+
+    createCategory(modal: OpenableModal): void {
+        if (this.categoryForm.invalid) {
+            return;
         }
+        modal.fechar();
+        this.facade
+            .createCategory(this.categoryForm.value.name, this.pendingWords())
+            .subscribe(() => this.categoryForm.get('name')!.reset());
     }
 
-    editWord(modal: any) {
-        if (this.workForm.valid && this.word != undefined) {
-            modal.fechar();
-
-            this.wordService.editWord(this.workForm.value.word, this.word.id).subscribe({
-                next: (response) => {
-                    this.toastService.show('Projetos editaado com sucesso!', 'info');
-                    this.workForm.get('word')!.reset();
-                    this.getCategorys();
-                },
-                error: (error) => {
-                    this.toastService.show('Projetos ou senha inválidos!', 'error');
-                }
-            });
+    updateCategory(modal: OpenableModal): void {
+        if (this.categoryForm.invalid || !this.selectedCategory) {
+            return;
         }
+        modal.fechar();
+        this.facade
+            .updateCategory(this.categoryForm.value.name, this.selectedCategory.id)
+            .subscribe(() => this.categoryForm.get('name')!.reset());
     }
 
-    insertWord(modal: any) {
-        if (this.workForm.valid && this.category != undefined) {
-            this.addItem();
-            modal.fechar();
-            this.salvarWords(this.category!.id);
+    updateWord(modal: OpenableModal): void {
+        if (this.wordForm.invalid || !this.selectedWord) {
+            return;
         }
+        modal.fechar();
+        this.facade
+            .updateWord(this.wordForm.value.word, this.selectedWord.id)
+            .subscribe(() => this.wordForm.get('word')!.reset());
     }
 
-    salvarWords(id: any) {
-        this.wordService.saveWord(this.wordAdds(), id).subscribe({
-            next: (response) => {
-                this.toastService.show('Projetos salvo com sucesso!', 'info');
-                this.workForm.get('word')!.reset();
-                this.getCategorys();
-            },
-            error: (error) => {
-                this.toastService.show('Projetos ou senha inválidos!', 'error');
-            }
-        });
-    }
-
-    getCategorys() {
-        this.categoryService.getCategorys().subscribe({
-            next: (response) => {
-                this.createList(response);
-            },
-            error: (error) => {
-                this.toastService.show('Usuário ou senha inválidos!', 'error');
-            }
-        });
-    }
-
-
-    createList(list: any[]) {
-        this.categorys.update(item => []);
-        this.words.update(item => [])
-        this.wordAdds.update(item => []);
-
-        for (const category of list) {
-
-            let words: Word[] = [];
-
-            for (const word of category['words']) {
-                words.push(new Word(word['id'], word['name'], word['id_category']))
-            }
-
-            this.categorys.update(item => [...item, new Category(category['id'], category['name'], words)]);
+    insertWords(modal: OpenableModal): void {
+        if (this.wordForm.invalid || !this.selectedCategory) {
+            return;
         }
-
+        this.addPendingWord();
+        modal.fechar();
+        this.facade.saveWords(this.pendingWords(), this.selectedCategory.id);
     }
-
-
-    addItem() {
-        if (this.workForm.valid) {
-            this.wordAdds.update(item => [...item, new Word(this.wordAdds().length, this.workForm.value.word, -1)]);
-            this.workForm.get('word')!.reset();
-        }
-    }
-
 }
