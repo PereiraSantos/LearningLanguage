@@ -41,12 +41,12 @@ describe('CategoryComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create and load categories on initialization', () => {
+  it('deve criar e carregar as categorias na inicialização', () => {
     expect(component).toBeTruthy();
     expect(categoryService.getCategorys).toHaveBeenCalledOnce();
   });
 
-  it('should render the categories returned by the service', () => {
+  it('deve renderizar as categorias retornadas pelo serviço', () => {
     categoryService.getCategorys.mockReturnValue(
       of([{ id: 1, name: 'Animais', words: [{ id: 2, name: 'Dog', id_category: 1 }] }]),
     );
@@ -58,7 +58,7 @@ describe('CategoryComponent', () => {
     expect(component.categories()[0].words[0].name).toBe('Dog');
   });
 
-  it('should add a valid pending word and reset the word form', () => {
+  it('deve adicionar uma palavra pendente válida e limpar o formulário de palavras', () => {
     component.wordForm.setValue({ word: 'House' });
 
     component.addPendingWord();
@@ -69,7 +69,7 @@ describe('CategoryComponent', () => {
     expect(component.wordForm.get('word')?.value).toBeNull();
   });
 
-  it('should not add an invalid pending word', () => {
+  it('não deve adicionar uma palavra pendente inválida', () => {
     component.wordForm.setValue({ word: '' });
 
     component.addPendingWord();
@@ -77,7 +77,7 @@ describe('CategoryComponent', () => {
     expect(component.pendingWords()).toHaveLength(0);
   });
 
-  it('should remove a pending word by id', () => {
+  it('deve remover uma palavra pendente pelo id', () => {
     component.wordForm.setValue({ word: 'House' });
     component.addPendingWord();
     component.wordForm.setValue({ word: 'Car' });

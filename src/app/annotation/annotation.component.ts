@@ -1,124 +1,66 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TextSmallService } from '../services/text-small.servie';
-import { ToastService } from '../services/toast.service';
 
-import { TextLongInfo } from '../entities/text_long_info';
-import { TextSmallInfo } from '../entities/text_small_info';
-
-
-
+import { AnnotationFacade } from './annotation.facade';
+import { AnnotationRecorderService } from './annotation-recorder.service';
 @Component({
     selector: 'app-annotation',
     standalone: true,
     imports: [FormsModule, ReactiveFormsModule],
     templateUrl: './annotation.component.html',
-    styleUrls: ['./annotation.component.css']
+    styleUrls: ['./annotation.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [AnnotationFacade, AnnotationRecorderService],
 })
 export class AnnotationComponent implements OnInit {
+    private readonly fb = inject(FormBuilder);
+    private readonly facade = inject(AnnotationFacade);
+    private readonly recorder = inject(AnnotationRecorderService);
 
-    private toastService = inject(ToastService);
-
-    constructor(private textSmallService: TextSmallService, public fb: FormBuilder) { }
-
-    charCountText = signal(0);
-    textForm!: FormGroup
-    items: string[] = [];
-    fileName: string = '';
-    isRecording: boolean = false;
-    mediaRecorder: any;
-
-    textLongInfos = signal<TextLongInfo[]>([]);
-    textSmallInfos = signal<TextSmallInfo[]>([]);
-
+    readonly items = this.facade.items;
+    readonly isRecording = this.recorder.isRecording;
+    readonly charCountText = signal(0);
+    textForm!: FormGroup;
     ngOnInit(): void {
         this.initForm();
     }
 
-    initForm() {
+    private initForm(): void {
         this.textForm = this.fb.group({
-            value: ['', [Validators.required, Validators.maxLength(1100)]]
+            value: ['', [Validators.required, Validators.maxLength(1100)]],
         });
     }
 
-
-
-    updateCountTex() {
-        this.charCountText.set((this.textForm.value.value).length);
+    /** Atualiza o contador de caracteres conforme o usuário digita. */
+    updateCountTex(): void {
+        this.charCountText.set((this.textForm.get('value')?.value ?? '').length);
     }
 
-    saveAll() {
-        this.textSmallService.saveTextSmall(this.items).subscribe({
-            next: (response) => {
-                this.toastService.show('Texto salvo com sucesso!', 'info');
+    /** Adiciona o texto atual (se válido) à lista e limpa o campo. */
+    addItem(): void {
+        if (this.textForm.invalid) {
+            return;
+        }
 
-                this.textForm.get('value')!.reset();
+        this.facade.addItem(this.textForm.value.value);
+        this.textForm.get('value')!.reset();
+        this.updateCountTex();
+    }
 
-                this.items = [];
+    removeItem(index: number): void {
+        this.facade.removeItem(index);
+    }
 
-            },
-            error: (error) => {
-                this.toastService.show('Projetos ou senha inválidos!', 'error');
-            }
+    /** Persiste todas as anotações pendentes. */
+    saveAll(): void {
+        this.facade.save().subscribe(() => {
+            this.textForm.get('value')!.reset();
+            this.updateCountTex();
         });
     }
 
-    addItem() {
-        if (this.textForm.valid) {
-            const text = this.textForm.value.value.trim();
-            if (text) {
-                this.items.push(text);
-                this.textForm.get('value')!.reset();
-            }
-        }
+    /** Alterna a gravação de áudio (delegada ao serviço de gravação). */
+    async toggleRecording(): Promise<void> {
+        await this.recorder.toggle();
     }
-
-    removeItem(index: number) {
-        this.items.splice(index, 1);
-    }
-
-    handleUpload(event: any) {
-        const file = event.target.files[0];
-        if (file) {
-            this.fileName = file.name;
-            console.log('Arquivo selecionado:', file);
-        }
-    }
-
-    async toggleRecording() {
-        if (this.isRecording) {
-            this.stopRecording();
-        } else {
-            this.startRecording();
-        }
-    }
-
-    async startRecording() {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            this.mediaRecorder = new MediaRecorder(stream);
-            this.isRecording = true;
-            this.fileName = 'Gravando áudio...';
-
-            this.mediaRecorder.start();
-            console.log('Gravação iniciada');
-        } catch (err) {
-            console.error('Erro ao acessar microfone:', err);
-            alert('Permissão de microfone negada.');
-        }
-    }
-
-    stopRecording() {
-        if (this.mediaRecorder) {
-            this.mediaRecorder.stop();
-            this.isRecording = false;
-            this.fileName = 'Gravação concluída';
-
-            this.mediaRecorder.ondataavailable = (e: any) => {
-                const audioBlob = e.data;
-                console.log('Áudio gravado (Blob):', audioBlob);
-            };
-        }
-    }
-
 }

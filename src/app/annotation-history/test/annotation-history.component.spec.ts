@@ -32,14 +32,14 @@ describe('AnnotationHistoryComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('should create and load the history on initialization', () => {
+  it('deve criar e carregar o histórico na inicialização', () => {
     fixture.detectChanges();
 
     expect(component).toBeTruthy();
     expect(textSmallService.getTextSmalls).toHaveBeenCalledOnce();
   });
 
-  it('should expose the grouped history returned by the service', () => {
+  it('deve expor o histórico agrupado retornado pelo serviço', () => {
     textSmallService.getTextSmalls.mockReturnValue(
       of([
         { id: 1, value: 'a', creation: '2024-01-01T10:00:00' },
@@ -54,7 +54,7 @@ describe('AnnotationHistoryComponent', () => {
     expect(component.textSmallInfos()[0].textSmalls.map((t) => t.value)).toEqual(['a', 'b']);
   });
 
-  it('should render one badge per day', () => {
+  it('deve renderizar um badge por dia', () => {
     textSmallService.getTextSmalls.mockReturnValue(
       of([
         { id: 1, value: 'a', creation: '2024-01-01T10:00:00' },
@@ -68,4 +68,5 @@ describe('AnnotationHistoryComponent', () => {
     expect(badges).toHaveLength(2);
   });
 });
+
 

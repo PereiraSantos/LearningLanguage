@@ -36,7 +36,7 @@ describe('CategoryFacade', () => {
     facade = TestBed.inject(CategoryFacade);
   });
 
-  it('should load and map categories', () => {
+  it('deve carregar e mapear as categorias', () => {
     categoryService.getCategorys.mockReturnValue(
       of([{ id: 1, name: 'Animais', words: [{ id: 2, name: 'Dog', id_category: 1 }] }]),
     );
@@ -47,7 +47,7 @@ describe('CategoryFacade', () => {
     expect(facade.categories()[0].words[0].name).toBe('Dog');
   });
 
-  it('should show an error toast when loading fails', () => {
+  it('deve exibir um toast de erro quando o carregamento falhar', () => {
     categoryService.getCategorys.mockReturnValue(throwError(() => new Error('fail')));
 
     facade.loadCategories();
@@ -55,7 +55,7 @@ describe('CategoryFacade', () => {
     expect(toastService.show).toHaveBeenCalledWith(expect.any(String), 'error');
   });
 
-  it('should create a category and then persist its pending words', () => {
+  it('deve criar uma categoria e em seguida persistir suas palavras pendentes', () => {
     categoryService.saveCategory.mockReturnValue(of({ id: 10, name: 'Nova' }));
     wordService.saveWord.mockReturnValue(of([]));
     const pending = [new Word(0, 'Dog', -1)];
@@ -66,7 +66,7 @@ describe('CategoryFacade', () => {
     expect(wordService.saveWord).toHaveBeenCalledWith(pending, 10);
   });
 
-  it('should not call the word service when there are no pending words', () => {
+  it('não deve chamar o serviço de palavras quando não houver palavras pendentes', () => {
     categoryService.getCategorys.mockReturnValue(of([]));
 
     facade.saveWords([], 10);
@@ -74,7 +74,7 @@ describe('CategoryFacade', () => {
     expect(wordService.saveWord).not.toHaveBeenCalled();
   });
 
-  it('should manage the pending words list', () => {
+  it('deve gerenciar a lista de palavras pendentes', () => {
     facade.addPendingWord('Dog');
     facade.addPendingWord('Cat');
 
@@ -87,7 +87,7 @@ describe('CategoryFacade', () => {
     expect(facade.pendingWords()).toHaveLength(0);
   });
 
-  it('should show an error toast when editing fails', () => {
+  it('deve exibir um toast de erro quando a edição falhar', () => {
     categoryService.editCategory.mockReturnValue(throwError(() => new Error('fail')));
 
     facade.updateCategory('X', 1).subscribe();

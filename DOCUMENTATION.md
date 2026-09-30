@@ -49,11 +49,12 @@ Entities (modelo de domínio)  →  Services (HTTP)  →  Mapper (transformaçã
 ### Módulos completos (padrão Facade + Mapper)
 - `category/`
 - `annotation-history/`
+- `annotation/` (inclui `annotation-recorder.service.ts` encapsulando a API de gravação de áudio)
 
-Cada um contém `*.component.ts`, `*.facade.ts`, `*.mapper.ts`, `*.messages.ts` e testes em `spec/`.
+Cada um contém `*.component.ts`, `*.facade.ts`, `*.mapper.ts`, `*.messages.ts` e testes em `test/`.
 
 ### Módulos legados (lógica ainda no componente)
-- `annotation/`, `dialog/`, `dialog-history/` — contêm lógica de negócio/HTTP diretamente no componente e são candidatos a migrar para o padrão Facade + Mapper.
+- `dialog/`, `dialog-history/` — contêm lógica de negócio/HTTP diretamente no componente e são candidatos a migrar para o padrão Facade + Mapper.
 
 ---
 
@@ -91,7 +92,7 @@ src/
     ├── home/                     # Layout com sidenav + navegação
     ├── category/                 # Feature: categorias/palavras (padrão)
     ├── annotation-history/       # Feature: histórico de anotações (padrão)
-    ├── annotation/               # Feature legada: anotações
+    ├── annotation/               # Feature: anotações (padrão)
     ├── dialog/                   # Feature legada: diálogo
     └── dialog-history/           # Feature legada: histórico de diálogo
 ```
@@ -195,6 +196,19 @@ e `findIndex` dentro de um loop (O(n²)), com um bug que removia itens pelo prim
 encontrado da data. A refatoração para **Mapper puro com `Map`** corrigiu isso e tornou o
 fluxo testável.
 
+### Nota histórica (`annotation`)
+O componente original misturava view, validação, estado mutável (`items: string[]` com
+`push`/`splice`), HTTP e gravação de áudio (`MediaRecorder` com `any`), além de código morto
+(`textLongInfos`, `textSmallInfos`, `handleUpload`) e strings mágicas. A refatoração aplicou:
+
+1. **Mapper** (`annotation.mapper.ts`) — funções puras `normalizeItem`, `normalizeItems` e `hasItems`.
+2. **Facade** (`annotation.facade.ts`) — signal `items`, casos de uso `addItem`/`removeItem`/`clear`/`save`, orquestrando `TextSmallService` + `ToastService`.
+3. **`AnnotationRecorderService`** (`annotation-recorder.service.ts`) — encapsula `getUserMedia`/`MediaRecorder`, expõe signal `isRecording` e remove o uso de `any`.
+4. **Component** (`annotation.component.ts`) — "magro", `OnPush`, apenas formulário + delegação à facade/recorder.
+
+> **Ganhos:** estado imutável e reativo (compatível com `OnPush`), mensagens centralizadas
+> (`annotation.messages.ts`) e toda a lógica de negócio testável sem DOM.
+
 ---
 
 ## 8. Componentes de UI
@@ -211,14 +225,15 @@ fluxo testável.
 ## 9. Testes
 
 - Ferramenta: **Vitest** + **jsdom**, integrados ao Angular (`@angular/build:unit-test`).
-- Convenção: arquivos `*.spec.ts` ficam na subpasta **`spec/`** de cada feature.
+- Convenção: arquivos `*.spec.ts` ficam na subpasta **`test/`** de cada feature.
 - Mocks de serviços via objetos com `vi.fn()` e `providers` do `TestBed`.
 
 ### Cobertura atual
 | Feature | Testes |
 |---|---|
-| `category/spec` | `mapper`, `facade`, `component` |
-| `annotation-history/spec` | `mapper`, `facade`, `component` |
+| `category/test` | `mapper`, `facade`, `component` |
+| `annotation-history/test` | `mapper`, `facade`, `component` |
+| `annotation/test` | `mapper`, `facade`, `component` |
 | `src/app` | `app.spec.ts` (componente raiz) |
 
 ### Exemplo de execução
@@ -237,7 +252,7 @@ ng test --include='src/app/annotation-history/**/*.spec.ts'
 
 ## 10. Limitações conhecidas / Próximos passos
 
-- **Módulos legados** (`annotation`, `dialog`, `dialog-history`) ainda concentram lógica no componente: migrar para Facade + Mapper.
+- **Módulos legados** (`dialog`, `dialog-history`) ainda concentram lógica no componente: migrar para Facade + Mapper.
 - **`text-small.servie.ts`**: nome de arquivo com typo ("servie" → "service"); renomear exige atualizar imports.
 - **Tipagem fraca**: alguns serviços retornam `Observable<any>` (ex.: `TextSmallService`, `TextLongService`) — tipar com DTOs.
 - **Entidades `creation`**: `TextLong.creation` é tipado como `Date`, mas recebe string do split — padronizar como `string` (dia), como feito em `TextSmall`.

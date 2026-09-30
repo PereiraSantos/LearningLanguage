@@ -1,12 +1,12 @@
 import { toCategories } from '../category.mapper';
 
 describe('toCategories', () => {
-  it('should return an empty array for null or undefined input', () => {
+  it('deve retornar um array vazio para entrada null ou undefined', () => {
     expect(toCategories(null)).toEqual([]);
     expect(toCategories(undefined)).toEqual([]);
   });
 
-  it('should map DTOs into Category entities with their words', () => {
+  it('deve mapear os DTOs em entidades Category com suas palavras', () => {
     const result = toCategories([
       {
         id: 1,
@@ -24,7 +24,7 @@ describe('toCategories', () => {
     expect(result[0].words[0].idCategory).toBe(1);
   });
 
-  it('should default to an empty words list when absent', () => {
+  it('deve definir uma lista de palavras vazia quando ausente', () => {
     const result = toCategories([{ id: 1, name: 'Sem palavras' }]);
     expect(result[0].words).toEqual([]);
   });

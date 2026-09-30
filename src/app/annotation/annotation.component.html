@@ -17,7 +17,7 @@
         <small class="char-counter">{{ charCountText() }}/100</small>
 
 
-        @for (item of items; track $index) {
+        @for (item of items(); track $index) {
         <div class="item-list">
             <div class="container-item">
                 <h4>{{ item }}</h4>
@@ -31,7 +31,7 @@
 
 
         <div class="actions">
-            <button class="btn-save" [disabled]="items.length === 0" (click)="saveAll()">
+            <button class="btn-save" [disabled]="items().length === 0" (click)="saveAll()">
                 Salvar
             </button>
         </div>

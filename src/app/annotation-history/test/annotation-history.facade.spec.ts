@@ -28,11 +28,11 @@ describe('AnnotationHistoryFacade', () => {
     facade = TestBed.inject(AnnotationHistoryFacade);
   });
 
-  it('should start with an empty history', () => {
+  it('deve iniciar com um histórico vazio', () => {
     expect(facade.textSmallInfos()).toEqual([]);
   });
 
-  it('should load and group the history by day', () => {
+  it('deve carregar e agrupar o histórico por dia', () => {
     const dtos: TextSmallDTO[] = [
       { id: 1, value: 'a', creation: '2024-01-01T10:00:00' },
       { id: 2, value: 'b', creation: '2024-01-01T11:00:00' },
@@ -47,7 +47,7 @@ describe('AnnotationHistoryFacade', () => {
     expect(facade.textSmallInfos()[0].textSmalls).toHaveLength(2);
   });
 
-  it('should show an error toast and keep an empty list when loading fails', () => {
+  it('deve exibir um toast de erro e manter uma lista vazia quando o carregamento falhar', () => {
     textSmallService.getTextSmalls.mockReturnValue(throwError(() => new Error('fail')));
 
     facade.loadHistory();
@@ -56,4 +56,5 @@ describe('AnnotationHistoryFacade', () => {
     expect(facade.textSmallInfos()).toEqual([]);
   });
 });
+
 
