@@ -28,9 +28,37 @@ registro de **anotações** e **diálogos**, além de telas de **histórico** ag
 
 ---
 
-## 2. Arquitetura
+O projeto adota a estrutura de pastas **`core` / `features` / `shared`** (referência: [cota a estrutura de pastas **`core` / `features` / `shared`** (referência: [codedimension.com.br](https://blog.codedimension.com.br/post/estruturaodedimension.com.br](https://blog.codedimension.com.br/post/estrutura-de-pastas-em-projetos-angular/)).
 
-O projeto separa **cinco responsabilidades** por feature:
+- **`core/`** — nú-de-pastas-em-projetos-angular/)), com separação clara de responsabilidades:
+
+- **`core/`** — núcleo da aplicação, instanciado uma única vez:
+  - `layout/homecleo da aplicação, instanciado uma única vez: layout (`layout/home`), `toast.service`, `/` — shell da aplicação (sidenav + toolbar);
+  - `services/toast.service.ts` — serviço global de notificações;
+  - `components/toast-container.component.ts` — UI global de toasts;
+  - `core.providers.ts` — função `provideCore()` que agrupa os providers globais (HTTP etc.).
+- **`features/toast-container` e `core.providers.ts` (`provideCore()`).
+- **`features/`** — domínios de negócio autocontidos: `category`, `annotation`, `annotation-history`, `dialog`, `dialog-history`.
+- **`shared/`** — recursos reutilizáveis: `entities`, `services`, `components/modal`.
+
+###`** — domínios de negócio autocontidos: `category`, `annotation`, `annotation-history`, `dialog`, `dialog-history`.
+- **`shared/`** — recursos reutilizáveis entre features:
+  - `entities/` — modelo de domínio + DTOs;
+  - `services/` — acesso HTTP (um Regras de dependência
+```
+features  →  podem depender de  →  core e shared
+shared    →  pode depender de    →  core
+core      →  NUNCA depende de      shared ou features
+```
+
+Internamente, cada feature segue por recurso);
+  - `components/modal/` — modal genérico reutilizável.
+
+### Regras de dependência
+```
+features  →  podem depender de  →  core e shared
+shared    →  pode depender de    →  core
+core      →  NUN o padrão **Facade + Mapper**:
 
 ```
 Entities (modelo de domínio)  →  Services (HTTP)  →  Mapper (transformação pura)

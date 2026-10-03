@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { Home } from './home/home';
-import { CategoryComponent } from './category/category.component';
-import { DialogComponent } from './dialog/dialog.component';
-import { AnnotationHistoryComponent } from './annotation-history/annotation-history.component';
-import { AnnotationComponent } from './annotation/annotation.component';
-import { DialogHistoryComponent } from './dialog-history/dialog-history.component';
+import { Home } from './core/layout/home/home';
+import { CategoryComponent } from './features/category/category.component';
+import { DialogComponent } from './features/dialog/dialog.component';
+import { AnnotationHistoryComponent } from './features/annotation-history/annotation-history.component';
+import { AnnotationComponent } from './features/annotation/annotation.component';
+import { DialogHistoryComponent } from './features/dialog-history/dialog-history.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -22,3 +22,4 @@ export const routes: Routes = [
         ]
     }
 ];
+
